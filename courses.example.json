@@ -1,0 +1,8 @@
+[
+	{
+		"courseID": "cse101",
+		"edID": 12345,
+		"announcementWebhook": "https://discord.com/api/webhooks/...",
+		"feedWebhook": "https://discord.com/api/webhooks/..."
+	}
+]

@@ -1,0 +1,10 @@
+name = "ed-poster"
+main = "src/index.ts"
+compatibility_date = "2023-10-02"
+
+[[kv_namespaces]]
+binding = "LAST_THREADS"
+id = "PUT ID HERE"
+
+[triggers]
+crons = ["* * * * *"]
