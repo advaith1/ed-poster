@@ -11,9 +11,11 @@ interface Thread {
 	title: string
 	document: string
 	category: string
+	is_private: boolean
+	is_anonymous: boolean
 	user: {
 		name: string
-	}
+	} | null
 }
 
 interface EdResponse {
@@ -40,7 +42,7 @@ const checkCourse = async ({ courseID, edID, announcementWebhook, feedWebhook }:
 
 	const lastThreadNumber = +(await env.LAST_THREADS.get(courseID) ?? 0)
 
-	const newThreads = threads.filter(thread => thread.number > lastThreadNumber)
+	const newThreads = threads.filter(thread => thread.number > lastThreadNumber && !thread.is_private)
 	if (!newThreads.length) return new Response('')
 
 	await env.LAST_THREADS.put(courseID, Math.max(...threads.map(thread => thread.number)).toString())
@@ -53,7 +55,7 @@ const checkCourse = async ({ courseID, edID, announcementWebhook, feedWebhook }:
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				username: `${thread.user?.name ?? 'Anonymous'} on Ed`,
+				username: `${thread.is_anonymous ? 'Anonymous' : thread.user?.name} on Ed`,
 				avatar_url: 'https://edcdn.net/assets/apple-touch-icon.f2974ade.png',
 				content: `## ${thread.title}\n${capitalize(thread.type)} in [${thread.category}](<https://edstem.org/us/courses/${edID}/discussion/?category=${encodeURIComponent(thread.category)}>)\n\n${thread.document}`,
 				components: [
