@@ -31,6 +31,7 @@ interface Course {
 
 import courses from '../courses.json'
 
+const trim = (text: string, max: number) => text.length > max ? text.substring(0, max - 1) + '…' : text
 const capitalize = (str: string) => str[0].toUpperCase() + str.slice(1)
 
 const checkCourse = async ({ courseID, edID, announcementWebhook, feedWebhook }: Course, env: Env) => {
@@ -57,7 +58,7 @@ const checkCourse = async ({ courseID, edID, announcementWebhook, feedWebhook }:
 			body: JSON.stringify({
 				username: `${thread.is_anonymous ? 'Anonymous' : thread.user?.name} on Ed`,
 				avatar_url: 'https://edcdn.net/assets/apple-touch-icon.f2974ade.png',
-				content: `## ${thread.title}\n${capitalize(thread.type)} in [${thread.category}](<https://edstem.org/us/courses/${edID}/discussion/?category=${encodeURIComponent(thread.category)}>)\n\n${thread.document}`,
+				content: trim(`## ${thread.title}\n${capitalize(thread.type)} in [${thread.category}](<https://edstem.org/us/courses/${edID}/discussion/?category=${encodeURIComponent(thread.category)}>)\n\n${thread.document}`, 2000),
 				components: [
 					{
 						type: 1,
