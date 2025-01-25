@@ -52,7 +52,7 @@ const checkCourse = async ({ courseID, edID, announcementWebhook, feedWebhook }:
 
 	for (const thread of newThreads) {
 		const webhook = thread.type === 'announcement' ? announcementWebhook : feedWebhook
-		await fetch(webhook, {
+		await fetch(webhook + '?with_components=true', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
